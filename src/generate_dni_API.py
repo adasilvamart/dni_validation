@@ -15,13 +15,9 @@ def generateDNIList(numDNIs):
     
 
 def generateIncorrectDNIList(numDNIs):
-    tabla = TablaAsignacion()
-    incorrectList = []
-    for dni in generateDNIList(numDNIs):
-        if random.choice(tabla.getTabla()) != dni[-1]:
-            incorrectList.append(dni[:-1] + random.choice(tabla.getTabla()))
-        elif len(dni) != 9:
-            pass
+    t = TablaAsignacion()
+    diferent_letter = lambda t, dni: random.choice(t.getTabla()) != dni[-1]
+    incorrectList = [dni[:-1] + random.choice(t.getTabla()) for dni in generateDNIList(numDNIs) if diferent_letter(t, dni)]
     return incorrectList
     
 def generateRandomCases(numCases):

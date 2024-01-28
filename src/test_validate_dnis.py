@@ -11,7 +11,8 @@ def test_isCorrectDNI(numOfCases):
     testCases = [correct, incorrect]
     for listOfCases in testCases:
         for dni in listOfCases:
-            print(f'{dni}\t: Correcto') if TablaAsignacion.isCorrectDNI(dni) else print(f'{dni}\t: Incorrecto')
+            t = TablaAsignacion()
+            print(f'{dni}\t: Correcto') if t.validateDNI(dni) else print(f'{dni}\t: Incorrecto')
     
     
 if __name__ == '__main__':
