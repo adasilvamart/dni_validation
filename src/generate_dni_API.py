@@ -1,6 +1,6 @@
 import requests
 import random
-from TablaAsig import TablaAsignacion
+from src.TablaAsig import TablaAsignacion
 
 t = TablaAsignacion()
 
@@ -13,27 +13,19 @@ def generateDNIList(numDNIs):
     except Exception as e:
         return f'Error: {e}'
 
+longitudDNIEspanol = 9
 
 def generateCorrectCases(numDNIs):
     valids = []
-    for dni in generateDNIList(numDNIs):
-        while len(valids) < numDNIs:
-            if t.validateDNI(dni):
-                valids.append(dni)
+
+    while len(valids) < numDNIs:
+        for dni in generateDNIList(numDNIs):
+            valids.append(dni)
     return valids
 
 
 def generateIncorrectDNIList(numDNIs):
-    not_valids = []   
-    for dni in generateDNIList(numDNIs):
-        while len(not_valids) < numDNIs:
-            if t.validateDNI(dni):
-                not_valids.append(dni[:-1] + random.choice(t.getTabla()))
-            elif len(dni) != 9:
-                not_valids.append(str(random.randint(1, 9)) + dni[1:])
-            else:
-                not_valids.append(dni)
-    return not_valids
+    return map(lambda x: str(f"{int(x[:-1]) + 1}{x[-1]}"), generateCorrectCases(numDNIs))
     
 def generateRandomCases(numCases):
     casosTest = []

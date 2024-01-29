@@ -31,16 +31,19 @@ class TablaAsignacion:
     
     def getTabla(self):
         return self.tabla
+    
+    def validateDNI(self, dni_string):
+        return self.getLetra(dni_string) == dni_string[-1].upper() if self.isCorrectDNI(dni_string) else False
 
-    @staticmethod
-    def isCorrectDNI(dni_string):
-        return True if dni_string[:-1].isdigit() and dni_string[-1].isalpha() and len(dni_string) == 9 else False
+    def isCorrectDNI(self, dni_string):
+        return dni_string[:-1].isdigit() and dni_string[-1].isalpha() and dni_string[-1].upper() == self.getLetra(dni_string).upper()
     
     def calcLetra(self, dni_string):
         return int(dni_string[:-1]) % len(self.getTabla())
-    
+
     def getLetra(self, dni_string):
         return self.tabla[self.calcLetra(dni_string)]
-
-    def validateDNI(self, dni_string):
-        return self.getLetra(dni_string) == dni_string[-1].upper() if self.isCorrectDNI(dni_string) else False
+    
+if __name__ == '__main__':
+    tabla = TablaAsignacion()
+    print(tabla.getTabla()[20])
