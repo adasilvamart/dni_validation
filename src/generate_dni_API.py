@@ -2,23 +2,38 @@ import requests
 import random
 from TablaAsig import TablaAsignacion
 
+t = TablaAsignacion()
 
 def generateDNIList(numDNIs):
     try:
-        if isinstance(numDNIs, int):
-            url = f"https://ensaimeitor.apsl.net/fiscal/10/?format=json&num={numDNIs}"
-            response = requests.get(url).json()
-            return response['codigo']
-        
+        url = f"https://ensaimeitor.apsl.net/fiscal/10/?format=json&num={numDNIs}"
+        response = requests.get(url).json()
+        return response['codigo']
+     
     except Exception as e:
         return f'Error: {e}'
-    
+
+
+def generateCorrectCases(numDNIs):
+    valids = []
+    for dni in generateDNIList(numDNIs):
+        while len(valids) < numDNIs:
+            if t.validateDNI(dni):
+                valids.append(dni)
+    return valids
+
 
 def generateIncorrectDNIList(numDNIs):
-    t = TablaAsignacion()
-    diferent_letter = lambda t, dni: random.choice(t.getTabla()) != dni[-1]
-    incorrectList = [dni[:-1] + random.choice(t.getTabla()) for dni in generateDNIList(numDNIs) if diferent_letter(t, dni)]
-    return incorrectList
+    not_valids = []   
+    for dni in generateDNIList(numDNIs):
+        while len(not_valids) < numDNIs:
+            if t.validateDNI(dni):
+                not_valids.append(dni[:-1] + random.choice(t.getTabla()))
+            elif len(dni) != 9:
+                not_valids.append(str(random.randint(1, 9)) + dni[1:])
+            else:
+                not_valids.append(dni)
+    return not_valids
     
 def generateRandomCases(numCases):
     casosTest = []
@@ -33,12 +48,17 @@ def generateRandomCases(numCases):
     return casosTest
 
 
-
-
 if __name__ == '__main__':
 
-    correctCases = generateDNIList(10)
-    incorrectCases = generateIncorrectDNIList(10)
-    randomCases = generateRandomCases(10)
-    print(len(incorrectCases[0]), incorrectCases[0])
-    print(len(correctCases[0]), correctCases[0])
+    correctCases = generateCorrectCases(2)
+    incorrectCases = generateIncorrectDNIList(2)
+    randomCases = generateRandomCases(2)
+
+    for i, dni in enumerate(incorrectCases):
+        print(f'{i + 1}:\t{dni} \t{t.validateDNI(dni)}')
+
+    for i, dni in enumerate(correctCases):
+        print(f'{i + 1}:\t{dni} \t{t.validateDNI(dni)}')
+
+    for i, dni in enumerate(randomCases):
+        print(f'{i + 1}:\t{dni} \t{t.validateDNI(dni)}')

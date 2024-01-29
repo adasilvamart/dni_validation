@@ -42,8 +42,5 @@ class TablaAsignacion:
     def getLetra(self, dni_string):
         return self.tabla[self.calcLetra(dni_string)]
 
-    
     def validateDNI(self, dni_string):
-        if self.isCorrectDNI(dni_string):
-            return self.getLetra(dni_string) == dni_string[-1].upper()
-    
+        return self.getLetra(dni_string) == dni_string[-1].upper() if self.isCorrectDNI(dni_string) else False

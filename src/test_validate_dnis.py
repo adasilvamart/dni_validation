@@ -1,19 +1,21 @@
 from TablaAsig import TablaAsignacion
-from generate_dni_API import generateDNIList, generateIncorrectDNIList
+from generate_dni_API import generateCorrectCases, generateIncorrectDNIList, generateRandomCases
 
-def generateTestCases(numOfCases):
-    correctCases = generateDNIList(numOfCases)
+t = TablaAsignacion()
+
+
+def test_validDNI(numOfCases):
+    correctCases = generateCorrectCases(numOfCases)
     incorrectCases = generateIncorrectDNIList(numOfCases)
-    return correctCases, incorrectCases
+    randomCases = generateRandomCases(numOfCases)
 
-def test_isCorrectDNI(numOfCases):
-    correct, incorrect = generateTestCases(numOfCases)
-    testCases = [correct, incorrect]
+    testCases = [correctCases, incorrectCases, randomCases]
+    
     for listOfCases in testCases:
-        for dni in listOfCases:
-            t = TablaAsignacion()
-            print(f'{dni}\t: Correcto') if t.validateDNI(dni) else print(f'{dni}\t: Incorrecto')
+        for i, dni in enumerate(listOfCases):
+            print(f'{i + 1}:\t{dni} \t{t.validateDNI(dni)}')
+        print(f'-' * 45)
     
     
 if __name__ == '__main__':
-    print(test_isCorrectDNI(20))
+    test_validDNI(10)

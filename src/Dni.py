@@ -1,10 +1,7 @@
 from TablaAsig import TablaAsignacion
 class Dni:
-    
-    tabla = TablaAsignacion()
-
-    def __init__(self, dni):
-        self.__dni = self.createValidDNI(dni)
+    def __init__(self, dni, tabla=TablaAsignacion()):
+        self.__dni = self.createValidDNI(dni, tabla)
 
     def __repr__(self):
         return str(self.getDni())
@@ -13,8 +10,7 @@ class Dni:
         return self.__dni
 
     @staticmethod
-    def createValidDNI(dni):
-        if Dni.tabla.validateDNI(dni):
+    def createValidDNI(dni, tabla):
+        if tabla.validateDNI(dni):
             return dni[:-1] + dni[-1].upper()
         raise ValueError('[!] El DNI no es válido')
-    
